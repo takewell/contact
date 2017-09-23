@@ -1,43 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var helmet = require('helmet');
-var session = require('express-session');
-var passport = require('passport');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const session = require('express-session');
+const passport = require('passport');
 
-var GitHubStrategy = require('passport-github2').Strategy;
-var GITHUB_CLIENT_ID = '5cd8619e301af17b466b';
-var GITHUB_CLIENT_SECRET = '32b11d9a50333940545fb523485973418f3d7cee';
+const index = require('./routes/index');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
+const auth = require('./lib/auth');
 
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (obj, done) {
-  done(null, obj);
-});
-
-
-passport.use(new GitHubStrategy({
-  clientID: GITHUB_CLIENT_ID,
-  clientSecret: GITHUB_CLIENT_SECRET,
-  callbackURL: 'http://localhost:8000/auth/github/callback'
-},
-  function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
-  }
-  ));
-
-var routes = require('./routes/index');
-var login = require('./routes/login');
-var logout = require('./routes/logout');
-
-var app = express();
+const app = express();
 app.use(helmet());
 
 // view engine setup
@@ -52,55 +28,44 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'e55be81b307c1c09', resave: false, saveUninitialized: false }));
+// express-session と passport でセッションを利用
+app.use(session({ secret: '468f60563eec98a0', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', routes);
+// -> routes
+app.use('/', index);
 app.use('/login', login);
 app.use('/logout', logout);
 
+auth.githubAuth();
+
 app.get('/auth/github',
   passport.authenticate('github', { scope: ['user:email'] }),
-  function (req, res) {
-  });
+  (req, res) => {});
 
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
-  function (req, res) {
+  (req, res) => {
     res.redirect('/');
   });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handlers
+// error handler
+app.use((err, req, res, next) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+  // render the error page
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  res.render('error');
 });
-
 
 module.exports = app;
