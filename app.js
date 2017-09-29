@@ -8,9 +8,30 @@ const helmet = require('helmet');
 const session = require('express-session');
 const passport = require('passport');
 
+// moduels 
+const User = require('./models/user');
+const Schedule = require('./models/schedule');
+const Availability = require('./models/availability');
+const Candidate = require('./models/candidate');
+const Comment = require('./models/comment');
+
+User.sync().then(() => {
+  Schedule.belongsTo(User, { foreignKey: 'createdBy' });
+  Schedule.sync();
+  Comment.belongsTo(User, { foreignKey: 'userId' });
+  Comment.sync();
+  Availability.belongsTo(User, { foreignKey: 'userId' });
+  Candidate.sync().then(() => {
+    Availability.belongsTo(Candidate, { foreignKey: 'candidateId' });
+    Availability.sync();
+  });
+});
+
+// routes
 const index = require('./routes/index');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
+const schedules = require('./routes/schedules');
 const auth = require('./lib/auth');
 
 const app = express();
@@ -37,15 +58,25 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/login', login);
 app.use('/logout', logout);
+app.use('/schedules', schedules);
 
 auth.githubAuth();
-
 app.get('/auth/github',
   passport.authenticate('github', { scope: ['user:email'] }),
   (req, res) => {});
-
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
+
+auth.facebookAuth();
+app.get('/auth/facebook',
+  passport.authenticate('facebook', { scope: ['email'] }),
+  (req, res) => {});
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
     res.redirect('/');
   });
