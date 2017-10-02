@@ -32,6 +32,8 @@ const index = require('./routes/index');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const schedules = require('./routes/schedules');
+const availabilities = require('./routes/availabilities');
+// lib
 const auth = require('./lib/auth');
 
 const app = express();
@@ -77,6 +79,17 @@ app.get('/auth/facebook',
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
+
+auth.twitterAuth();
+app.get('/auth/twitter',
+  passport.authenticate('twitter'),
+  (req, res) => {});
+
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
   (req, res) => {
     res.redirect('/');
   });
