@@ -14,20 +14,24 @@
     "express-session": "^1.13.0",
     "helmet": "^1.1.0",
     "jade": "~1.11.0",
+    "jquery": "^3.2.1",
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-github2": "^0.1.9",
+    "passport-twitter": "^1.0.4",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
     "pug": "^2.0.0-rc.4",
     "sequelize": "^3.25.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "mocha": "^2.4.5",
     "passport-stub": "^1.1.1",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "webpack": "^3.6.0"
   }
 }

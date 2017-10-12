@@ -6,27 +6,33 @@ block content
   div    
     a(href="/auth/facebook") Facebookでログイン
     br
+    a(href="/auth/twitter") Twitterでログイン
+    br
     a(href="/auth/github") GitHubでログイン
 
     if user
       case user.provider
         when "facebook"
           p 現在 #{user.displayName} で Facebook ログイン中
+        when "twitter"
+          p 現在 #{user.username} で Twitter ログイン中
         when "github"
           p 現在 #{user.username} で GitHub ログイン中
       a(href="/logout") ログアウト
 
   div
     a(href="/schedules/new") 予定を作る
-  //- - var hasSchedule = schedules.length > 0
-  if hasSchedule
-    h3 あなたの作った予定一覧
-    table(class="table")
-      tr
-        th 予定名
-        th 更新日時
-        each schedule in schedules
-          tr
-            td
-              a(href="/schedules/#{schedule.scheduleId}") #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+    if schedules !== undefinend
+        h3 あなたの作った予定一覧
+        if schedules.length == 0
+          p 予定はありません
+        else
+          table(class="table")
+            tr
+              th 予定名
+              th 更新日時
+              each schedule in schedules
+                tr
+                  td
+                    a(href=`/schedules/${schedule.scheduleId}`) #{schedule.scheduleName}
+                  td #{schedule.updatedAt}

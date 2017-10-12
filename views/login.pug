@@ -1,12 +1,17 @@
 extends layout
 
 block content
-  a(href="/auth/facebook") Facebookでログイン
+  a(href="/auth/facebook") Facebook でログイン
   br
-  a(href="/auth/github") GitHubでログイン
+  a(href="/auth/twitter") Twitter でログイン  
+  br
+  a(href="/auth/github") GitHub でログイン
   
   if user
-    if user.provider == "facebook"
-      p 現在 #{user.displayName} で Facebook ログイン中
-    if user.provider == "github"
+    case user.provider
+      when "facebook"
+        p 現在 #{user.displayName} で Facebook ログイン中
+      when "twitter"
+        p 現在 #{user.username} で Twitter ログイン中
+      when "github"
         p 現在 #{user.username} で GitHub ログイン中
