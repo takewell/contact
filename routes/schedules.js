@@ -24,7 +24,7 @@ router.post('/', authenticationEnsurer, (req, res, next) => {
     createdBy: req.user.id,
     updatedAt: updatedAt
   }).then((schedule) => {
-    // 扱えるに整形して配列に格納する
+    // 候補日を扱えるに整形して配列に格納する
     const candidateNames = req.body.candidates.trim().split('\n').map((s) => s.trim());
     const candidates = candidateNames.map((c) => {
       return {
