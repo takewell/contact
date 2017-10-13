@@ -1,4 +1,6 @@
 'use strict';
+const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -11,6 +13,38 @@ const TWITTER_API_KEY = 'LnlxhSHLTWGVzsUH9NkknMCRe';
 const TWITTER_API_SECRET = 'U0mIIxR8ItYckAaqpAjpo8OTG4lKkfJXzlGHTTTkV2FIkaeE7a';
 const User = require('../models/user');
 
+
+githubAuth();
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }),
+  (req, res) => {});
+
+router.get('/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
+
+facebookAuth();
+router.get('/facebook',
+  passport.authenticate('facebook', { scope: ['email'] }),
+  (req, res) => {});
+
+router.get('/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
+
+twitterAuth();
+router.get('/twitter',
+  passport.authenticate('twitter'),
+  (req, res) => {});
+
+router.get('/twitter/callback',
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
 
 function githubAuth() {
   handleSession();
@@ -77,15 +111,9 @@ function handleSession() {
   passport.serializeUser((user, done) => {
     done(null, user);
   });
-
   passport.deserializeUser((obj, done) => {
     done(null, obj);
   });
 }
 
-// routing もこのファイルに書き出したかったが module.exports が複数のオブジェクトを返す想定ではないみたい…またリファクタリングに挑戦したい。
-module.exports = {
-  githubAuth: githubAuth,
-  facebookAuth: facebookAuth,
-  twitterAuth: twitterAuth
-}
+module.exports = router;

@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const session = require('express-session');
 const passport = require('passport');
 
-// moduels 
+// Moduels 
 const User = require('./models/user');
 const Schedule = require('./models/schedule');
 const Availability = require('./models/availability');
@@ -27,22 +27,15 @@ User.sync().then(() => {
   });
 });
 
-// routes
-const index = require('./routes/index');
-const login = require('./routes/login');
-const logout = require('./routes/logout');
-const schedules = require('./routes/schedules');
-const availabilities = require('./routes/availabilities');
-// lib
-const auth = require('./lib/auth');
-
 const app = express();
+
 app.use(helmet());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// TODO: favicon
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -56,43 +49,19 @@ app.use(session({ secret: '468f60563eec98a0', resave: false, saveUninitialized: 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// -> routes
+// Control
+const index = require('./routes/index');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
+const auth = require('./routes/auth');
+const schedules = require('./routes/schedules');
+const availabilities = require('./routes/availabilities');
+
 app.use('/', index);
 app.use('/login', login);
 app.use('/logout', logout);
+app.use('/auth', auth);
 app.use('/schedules', schedules);
-
-auth.githubAuth();
-app.get('/auth/github',
-  passport.authenticate('github', { scope: ['user:email'] }),
-  (req, res) => {});
-app.get('/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.redirect('/');
-  });
-
-auth.facebookAuth();
-app.get('/auth/facebook',
-  passport.authenticate('facebook', { scope: ['email'] }),
-  (req, res) => {});
-
-app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.redirect('/');
-  });
-
-auth.twitterAuth();
-app.get('/auth/twitter',
-  passport.authenticate('twitter'),
-  (req, res) => {});
-
-app.get('/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.redirect('/');
-  });
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
