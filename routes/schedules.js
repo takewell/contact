@@ -1,19 +1,19 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const authenticationEnsurer = require('./authentication-ensurer');
 const uuid = require('node-uuid');
+const authenticationEnsurer = require('./authentication-ensurer');
 const Schedule = require('../models/schedule');
 const Candidate = require('../models/candidate');
 const User = require('../models/user');
 const Availability = require('../models/availability');
 
-// フォームをレンダリング
+// 予定新規作成フォームをレンダリング
 router.get('/new', authenticationEnsurer, (req, res, next) => {
   res.render('new', { user: req.user });
 });
 
-// スケジュールの入力フォームを受け取る
+// スケジュールの入力フォームを受けとりDBに同期する
 router.post('/', authenticationEnsurer, (req, res, next) => {
   const scheduleId = uuid.v4();
   const updatedAt = new Date();
@@ -38,7 +38,7 @@ router.post('/', authenticationEnsurer, (req, res, next) => {
   });
 });
 
-// スケジュールを取得して、その候補を取得する
+// スケジュール id をうけとって、レンダリング
 router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
   Schedule.findOne({
     include: [{
@@ -56,17 +56,11 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
         where: { scheduleId: schedule.scheduleId },
         order: '"candidateId" ASC'
       }).then((candidates) => {
-        // res.render('schedule', {
-        //   user: req.user,
-        //   schedule: schedule,
-        //   candidates: candidates,
-        //   users: [req.user]
-        // });
         // データベースからその予定すべての出欠を所得する
         Availability.findAll({
           include: [{
             model: User,
-            sttributes: ['userId', 'username']
+            attributes: ['userId', 'username']
           }],
           where: { scheduleId: schedule.scheduleId },
           order: '"user.username" ASC, "candidateId" ASC'
