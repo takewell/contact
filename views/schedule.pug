@@ -4,6 +4,9 @@ block content
   h4 #{schedule.scheduleName}
   p(style="white-space:pre;") #{schedule.memo}
   p 作成者: #{schedule.user.username}
+  - var isMine = user.id == schedule.user.userId
+  if isMine
+    a(href=`/schedules/${schedule.scheduleId}/edit`) この予定を編集する
   h3 出欠表
   table
     tr
@@ -14,7 +17,7 @@ block content
       tr
         th #{candidate.candidateName}
         each user in users
-          - var availability = availabilityMapMap.get(user.userId).get(candidate.candidateId)
+          - var availability = availabilityMapMap.get(user.userId).get(candidate.candidateId);
           - var availabilityLabels = ['欠', '？', '出'];
           td
             if user.isSelf
