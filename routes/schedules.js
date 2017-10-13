@@ -7,6 +7,7 @@ const Schedule = require('../models/schedule');
 const Candidate = require('../models/candidate');
 const User = require('../models/user');
 const Availability = require('../models/availability');
+const Comment = require('../models/comment');
 
 // 予定新規作成フォームをレンダリング
 router.get('/new', authenticationEnsurer, (req, res, next) => {
@@ -101,12 +102,29 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
 
           console.log(availabilityMapMap); // TODO 除去
 
-          res.render('schedule', {
-            user: req.user,
-            schedule: schedule,
-            candidates: candidates,
-            users: users,
-            availabilityMapMap: availabilityMapMap
+          // res.render('schedule', {
+          //   user: req.user,
+          //   schedule: schedule,
+          //   candidates: candidates,
+          //   users: users,
+          //   availabilityMapMap: availabilityMapMap
+
+          // コメントの所得
+          Comment.findAll({
+            where: { scheduleId: schedule.scheduleId }
+          }).then((comments) => {
+            const commentMap = new Map(); // key: userId, value: comment
+            comments.forEach((comment) => {
+              commentMap.set(comment.userId, comment.comment);
+            });
+            res.render('schedule', {
+              user: req.user,
+              schedule: schedule,
+              candidates: candidates,
+              users: users,
+              availabilityMapMap: availabilityMapMap,
+              commentMap: commentMap
+            });
           });
         });
       });

@@ -56,6 +56,7 @@ const logout = require('./routes/logout');
 const auth = require('./routes/auth');
 const schedules = require('./routes/schedules');
 const availabilities = require('./routes/availabilities');
+const comments = require('./routes/comments')
 
 app.use('/', index);
 app.use('/login', login);
@@ -63,6 +64,7 @@ app.use('/logout', logout);
 app.use('/auth', auth);
 app.use('/schedules', schedules);
 app.use('/schedules', availabilities);
+app.use('/schedules', comments);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
