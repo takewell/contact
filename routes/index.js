@@ -4,7 +4,7 @@ const router = express.Router();
 const Schedule = require('../models/schedule');
 
 router.get('/', (req, res, next) => {
-  const title = 'Counter';
+  const title = 'Scheduler';
   if (req.user) {
     Schedule.findAll({
       where: {

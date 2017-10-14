@@ -1,5 +1,8 @@
 'use strict';
 const $ = require('jquery');
+const global = Function('return this;')();
+global.jQuery = $;
+const bootstrap = require('bootstrap');
 
 $('.availability-toggle-button').each((i, e) => {
   const button = $(e);
