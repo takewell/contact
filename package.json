@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "body-parser": "~1.13.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.3.6",
     "cookie-parser": "~1.3.5",
     "debug": "~2.2.0",
     "express": "~4.13.1",
@@ -16,6 +16,7 @@
     "helmet": "^1.1.0",
     "jade": "~1.11.0",
     "jquery": "^3.2.1",
+    "moment-timezone": "^0.5.0",
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
@@ -33,6 +34,6 @@
     "mocha": "^2.4.5",
     "passport-stub": "^1.1.1",
     "supertest": "^1.2.0",
-    "webpack": "^3.6.0"
+    "webpack": "^2.3.2"
   }
 }

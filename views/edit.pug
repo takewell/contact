@@ -1,23 +1,21 @@
 extends layout
 
 block content
-  h3 予定の編集
-  form(method="post", action=`/schedules/${schedule.scheduleId}?edit=1`)
-    div
-      h5 予定名
-      input(type="text" name="scheduleName" value=`${schedule.scheduleName}`)
-    div
-      h5 メモ
-      textarea(name="memo") #{schedule.memo}
-    div
-      label 既存の候補日程
-      ul
+  br
+  form(method="post" action=`/schedules/${schedule.scheduleId}?edit=1`)
+    div.form-group
+      label(for="inputScheduleName" class="col-form-label") 予定の編集
+      input(type="text" class="form-control" name="scheduleName" value=`${schedule.scheduleName}`)
+    div.form-group
+      label(for="inputMemo" class="col-form-label") メモ 
+      textarea(name="memo" class="form-control" rows="3") #{schedule.memo}
+    div.form-group
+      label(for="inputCandidates" class="col-form-label") 候補日程の追加(複数入力してそれぞれを改行してください。)
+      ul.list-group
         each candidate in candidates
-          li #{candidate.candidateName}
-      p 候補日程の追加 (改行して複数入力してください)
-      textarea(name="candidates")
-    div
-      button(type="submit") 以上の内容で予定を編集する
-  h3 危険な変更
+          li.list-group-item #{candidate.candidateName}
+      textarea(name="candidates" class="form-control" rows="5")
+    button(type="submit" class="btn btn-primary") 以上の内容で予定を編集する
+  br
   form(method="post", action=`/schedules/${schedule.scheduleId}?delete=1`)
-    button(type="submit") この予定を削除する
+    button(type="submit" class="btn btn-outline-danger") この予定を削除する

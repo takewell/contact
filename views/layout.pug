@@ -7,28 +7,28 @@ html
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
-    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous")
-    link(rel="stylesheet" href="./../../style.css")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous")
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet")
+
+    link(rel="stylesheet", href="/stylesheets/style.css")
 
   body
-    nav(class="navbar navbar-light" style="background-color: #F22A6C; color: white;")
+    nav(class="navbar navbar-dark bg-dark")
       div(class="navbar-header")
-        a(class="navbar-brand" href="/") Scheduler
-      div(class="container-fluid")
-        ul(class="nav navbar-nav navbar-right")
-          if user
-            li
-              case user.provider
-                when "facebook"
-                  a(href="/logout") #{user.displayName} を ログアウト(Facebook)
-                when "twitter"
-                  a(href="/logout") #{user.username} を ログアウト(Twitter)
-                when "github"
-                  a(href="/logout") #{user.username} を ログアウト(GitHub)
-          else
-            li
-              a(href="/login") ログイン
+        a(class="navbar-brand btn btn-outline-secondary" href="/") Scheduler
+      ul(class="nav nav-pills")
+        if user
+          li.nav-item
+            case user.provider
+              when "facebook"
+                a(class="btn btn-outline-success" href="/logout") #{user.displayName} をログアウト
+              when "twitter"
+                a(class="btn btn-outline-success" href="/logout") #{user.username} をログアウト
+              when "github"
+                a(class="btn btn-outline-success" href="/logout") #{user.username} をログアウト
+        else
+          li.nav-item
+            a(class="btn btn-outline-success" href="/login") ログイン
     div(class="container")
       block content
     script(src="/javascripts/bundle.js")

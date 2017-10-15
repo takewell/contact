@@ -1,17 +1,27 @@
 extends layout
 
 block content
-  a(href="/auth/facebook") Facebook でログイン
   br
-  a(href="/auth/twitter") Twitter でログイン  
-  br
-  a(href="/auth/github") GitHub でログイン
-  
-  if user
-    case user.provider
-      when "facebook"
-        p 現在 #{user.displayName} で Facebook ログイン中
-      when "twitter"
-        p 現在 #{user.username} で Twitter ログイン中
-      when "github"
-        p 現在 #{user.username} で GitHub ログイン中
+  div.container
+    div.row
+      div.col-lg-12.text-center
+        h2.section-heading SNS認証でログイン
+  div.row.text-center
+    div.col-md-4
+      span(class="btn fa-stack fa-4x")
+        i(class="fa fa-circle fa-stack-2x text-primary")
+        i(class="fa fa-facebook-official fa-stack-1x fa-inverse")
+      br
+      a(class="btn btn-primary" href="/auth/facebook") Facebook でログインする
+    div.col-md-4
+      span(class="btn fa-stack fa-4x")
+        i(class="fa fa-circle fa-stack-2x text-primary")
+        i(class="fa fa-twitter fa-stack-1x fa-inverse")
+      br
+      a(class="btn btn-primary" href="/auth/twitter") Twitter でログインする
+    div.col-md-4
+      span(class="btn fa-stack fa-4x")
+        i(class="fa fa-circle fa-stack-2x text-primary")
+        i(class="fa fa-github fa-stack-1x fa-inverse")
+      br
+      a(class="btn btn-primary" href="/auth/github") Github でログインする
