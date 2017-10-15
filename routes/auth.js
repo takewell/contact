@@ -9,8 +9,8 @@ const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '5cd8619e301af17b466b';
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '32b11d9a50333940545fb523485973418f3d7cee';
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || '1584743904911001';
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || '6235ed2647af47d79b5c16880a70b5ad';
-const TWITTER_API_KEY = 'LnlxhSHLTWGVzsUH9NkknMCRe';
-const TWITTER_API_SECRET = 'U0mIIxR8ItYckAaqpAjpo8OTG4lKkfJXzlGHTTTkV2FIkaeE7a';
+const TWITTER_API_KEY = process.env.TWITTER_API_KEY || 'LnlxhSHLTWGVzsUH9NkknMCRe';
+const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET || 'U0mIIxR8ItYckAaqpAjpo8OTG4lKkfJXzlGHTTTkV2FIkaeE7a';
 const User = require('../models/user');
 
 
@@ -118,7 +118,7 @@ function twitterAuth() {
   passport.use(new TwitterStrategy({
       consumerKey: TWITTER_API_KEY,
       consumerSecret: TWITTER_API_SECRET,
-      callbackURL: "http://localhost:8000/auth/twitter/callback",
+      callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/twitter/callback' : 'http://localhost:8000/auth/twitter/callback',
       includeEmail: true
     },
     (accessToken, refreshToken, profile, done) => {
