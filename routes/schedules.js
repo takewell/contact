@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const uuid = require('node-uuid');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 const authenticationEnsurer = require('./authentication-ensurer');
 const Schedule = require('../models/schedule');
 const Candidate = require('../models/candidate');
@@ -10,12 +12,12 @@ const Availability = require('../models/availability');
 const Comment = require('../models/comment');
 
 // 予定新規作成フォームをレンダリング
-router.get('/new', authenticationEnsurer, (req, res, next) => {
-  res.render('new', { user: req.user });
+router.get('/new', authenticationEnsurer, csrfProtection, (req, res, next) => {
+  res.render('new', { user: req.user, csrfToken: req.csrfToken() });
 });
 
 // スケジュールの入力フォームを受けとりDBに同期する
-router.post('/', authenticationEnsurer, (req, res, next) => {
+router.post('/', authenticationEnsurer, csrfProtection, (req, res, next) => {
   const scheduleId = uuid.v4();
   const updatedAt = new Date();
   Schedule.create({
@@ -30,7 +32,7 @@ router.post('/', authenticationEnsurer, (req, res, next) => {
 });
 
 // スケジュール id をうけとって、レンダリング
-router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
+router.get('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, next) => {
   Schedule.findOne({
     include: [{
       model: User,
@@ -119,7 +121,7 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
 });
 
 // 編集フォームをレンダリング 
-router.get('/:scheduleId/edit', authenticationEnsurer, (req, res, next) => {
+router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,  (req, res, next) => {
   Schedule.findOne({
     where: {
       scheduleId: req.params.scheduleId
@@ -133,7 +135,8 @@ router.get('/:scheduleId/edit', authenticationEnsurer, (req, res, next) => {
         res.render('edit', {
           user: req.user,
           schedule: schedule,
-          candidates: candidates
+          candidates: candidates,
+          csrfToken: req.csrfToken()
         });
       });
     } else {

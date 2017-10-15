@@ -1,0 +1,11 @@
+{
+  "name": "scheduler",
+  "description": "scheduler",
+  "logo": "",
+  "keywords": ["node"],
+  "image": "heroku/nodejs"
+},
+ "engines": {
+    "node": "6.11.1"
+   }
+}

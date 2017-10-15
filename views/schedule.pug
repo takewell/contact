@@ -8,9 +8,15 @@ block content
       p(class="card-text" style="white-space:pre;") #{schedule.memo}
       p.card-text
         small.text-muted 作成者: #{schedule.user.username}
-      - var isMine = user.id == schedule.user.userId
-      if isMine
-        a(class="btn btn-primary" href=`/schedules/${schedule.scheduleId}/edit`) この予定を編集する
+  br
+  div(class="form-group")
+    label(for="shareURL") 共有用 URL:
+    - var herokuURL = process.env.HEROKU_URL ? process.env.HEROKU_URL : 'http://localhost:8000/'
+    input(id="shareURL" class="form-control" type="text" value=`${herokuURL}schedules/${schedule.scheduleId}/`)
+  - var isMine = user.id == schedule.user.userId
+  if isMine
+    div
+      a(class="btn btn-primary" href=`/schedules/${schedule.scheduleId}/edit`) この予定を編集する
   br
   h3 出欠表
   table.table

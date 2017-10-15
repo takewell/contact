@@ -2,6 +2,7 @@ extends layout
 
 block content
   form(method="post", action="/schedules")
+    input(type="hidden" name="_csrf" value!="#{csrfToken}")
     br
     div.form-group
       label(for="inputScheduleName" class="col-form-label") 予定名

@@ -5,8 +5,8 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
-const GITHUB_CLIENT_ID = '5cd8619e301af17b466b';
-const GITHUB_CLIENT_SECRET = '32b11d9a50333940545fb523485973418f3d7cee';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '5cd8619e301af17b466b';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '32b11d9a50333940545fb523485973418f3d7cee';
 const FACEBOOK_APP_ID = '1584743904911001'
 const FACEBOOK_APP_SECRET = '6235ed2647af47d79b5c16880a70b5ad';
 const TWITTER_API_KEY = 'LnlxhSHLTWGVzsUH9NkknMCRe';
@@ -21,7 +21,16 @@ router.get('/github', passport.authenticate('github', { scope: ['user:email'] })
 router.get('/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/');
+    var loginFrom = req.cookies.loginFrom;
+        // オープンリダイレクタ脆弱性対策
+        if (loginFrom &&
+         loginFrom.indexOf('http://') < 0 &&
+         loginFrom.indexOf('https://') < 0) {
+          res.clearCookie('loginFrom');
+          res.redirect(loginFrom);
+        } else {
+          res.redirect('/');
+        }
   });
 
 facebookAuth();
@@ -32,7 +41,16 @@ router.get('/facebook',
 router.get('/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/');
+    var loginFrom = req.cookies.loginFrom;
+    // オープンリダイレクタ脆弱性対策
+    if (loginFrom &&
+     loginFrom.indexOf('http://') < 0 &&
+     loginFrom.indexOf('https://') < 0) {
+      res.clearCookie('loginFrom');
+      res.redirect(loginFrom);
+    } else {
+      res.redirect('/');
+    }
   });
 
 twitterAuth();
@@ -43,7 +61,16 @@ router.get('/twitter',
 router.get('/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/');
+    var loginFrom = req.cookies.loginFrom;
+    // オープンリダイレクタ脆弱性対策
+    if (loginFrom &&
+     loginFrom.indexOf('http://') < 0 &&
+     loginFrom.indexOf('https://') < 0) {
+      res.clearCookie('loginFrom');
+      res.redirect(loginFrom);
+    } else {
+      res.redirect('/');
+    }
   });
 
 function githubAuth() {
@@ -51,7 +78,7 @@ function githubAuth() {
   passport.use(new GitHubStrategy({
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: 'http://localhost:8000/auth/github/callback'
+      callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
     },
     (accessToken, refreshToken, profile, done) => {
       process.nextTick(() => {
