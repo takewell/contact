@@ -151,7 +151,7 @@ function isMine(req, schedule) {
   return schedule && parseInt(schedule.createdBy) === parseInt(req.user.id);
 }
 
-router.post('/:scheduleId', authenticationEnsurer, (req, res, next) => {
+router.post('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, next) => {
   if (parseInt(req.query.edit) === 1) {
     Schedule.findOne({
       where: {
