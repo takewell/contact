@@ -3,7 +3,7 @@ extends layout
 block content
   br
   form(method="post" action=`/schedules/${schedule.scheduleId}?edit=1`)
-    input(type="hidden" name="_csrf" value!="#{csrfToken}")
+    input(type="hidden" name="_csrf" value!=`${csrfToken}`)
     div.form-group
       label(for="inputScheduleName" class="col-form-label") 予定の編集
       input(type="text" class="form-control" name="scheduleName" value=`${schedule.scheduleName}`)
@@ -19,5 +19,5 @@ block content
     button(type="submit" class="btn btn-primary") 以上の内容で予定を編集する
   br
   form(method="post", action=`/schedules/${schedule.scheduleId}?delete=1`)
-    input(type="hidden" name="_csrf" value!="#{csrfToken}")
+    input(type="hidden" name="_csrf" value!=`${csrfToken}`)
     button(type="submit" class="btn btn-outline-danger") この予定を削除する
