@@ -37,7 +37,7 @@ app.set('view engine', 'pug');
 
 // TODO: favicon
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'scheduler-favicon.png')));
+app.use(favicon(path.join(__dirname, 'public', '/img/scheduler-favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -2,15 +2,32 @@ extends layout
 
 block content
   if !user
-    div.jumbotron
-      h1= title
-      p #{title} は各種SNSでの認証で、予定を作って出欠が取れる日程調整ツールです。
-        span お問い合わせは
-        a(href="https://twitter.com/y_takewell") takewell
-        span まで
-      p ※Twitter認証で一部機能が使えないことが確認されています。しばらく修正をお待ちください。
-      p.lead
-        a(class="btn btn-primary btn-lg" href="/login" role="button") 登録する
+    div(class="row align-items-center")
+      div(class="col-6 mx-auto col-md-6 order-md-2")
+        img(src="/img/scheduler-main.png" alt="" class="img-fluid mb-3 mb-md-0")
+      div(class="col-md-6 order-md-1 text-center text-md-left pr-md-5")
+        h1(class="mb-3 bd-text-purple-bright")=title
+        p(class="lead") #{title} は各種SNSでの認証で、予定を作って出欠が取れる日程調整ツールです。
+          br
+          span お問い合わせは
+            a(href="https://twitter.com/y_takewell") takewell
+          span まで
+        p(class="lead mb-4") ※Twitter認証で一部機能が使えないことが確認されています。しばらく修正をお待ちください。
+        div(class="d-flex flex-column flex-md-row lead mb-3")
+          a(class="btn btn-primary btn-lg" href="/login" role="button") 登録する
+    div(class="masthead-followup row m-0 border border-white")
+      div(class="col-12 col-md-4 p-3 p-md-5 bg-light border border-white")
+        h3 SNS 認証
+        p ご利用なさっているSNS で認証が可能です。ご要望に応じて認証できるサービスも追加していく予定です。
+      div(class="col-12 col-md-4 p-3 p-md-5 bg-light border border-white")
+        h3 予定調整
+        p  出欠をとりたい予定を作り、リンクを共有することで参加者の日程調整をすることができます。
+      div(class="col-12 col-md-4 p-3 p-md-5 bg-light border border-white")
+        span(class="badge badge-pill badge-info") リリース予定
+        h3 スケジュール管理
+        p カレンダーで日程を登録、確認できるようになります。当然、日程調整が終わった予定を反映させることもできます。
+
+
   if user
     br
     div
