@@ -120,37 +120,6 @@ router.get('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, nex
   });
 });
 
-// 編集フォームをレンダリング 
-router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,  (req, res, next) => {
-  Schedule.findOne({
-    where: {
-      scheduleId: req.params.scheduleId
-    }
-  }).then((schedule) => {
-    if (isMine(req, schedule)) { // 作成者のみが編集フォームを開ける
-      Candidate.findAll({
-        where: { scheduleId: schedule.scheduleId },
-        order: '"candidateId" ASC'
-      }).then((candidates) => {
-        res.render('edit', {
-          user: req.user,
-          schedule: schedule,
-          candidates: candidates,
-          csrfToken: req.csrfToken()
-        });
-      });
-    } else {
-      const err = new Error('指定された予定がない、または、予定する権限がありません');
-      err.status = 404;
-      next(err);
-    }
-  });
-});
-
-function isMine(req, schedule) {
-  return schedule && parseInt(schedule.createdBy) === parseInt(req.user.id);
-}
-
 router.post('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, next) => {
   if (parseInt(req.query.edit) === 1) {
     Schedule.findOne({
@@ -196,6 +165,37 @@ router.post('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, ne
     next(err);
   }
 });
+
+// 編集フォームをレンダリング 
+router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,  (req, res, next) => {
+  Schedule.findOne({
+    where: {
+      scheduleId: req.params.scheduleId
+    }
+  }).then((schedule) => {
+    if (isMine(req, schedule)) { // 作成者のみが編集フォームを開ける
+      Candidate.findAll({
+        where: { scheduleId: schedule.scheduleId },
+        order: '"candidateId" ASC'
+      }).then((candidates) => {
+        res.render('edit', {
+          user: req.user,
+          schedule: schedule,
+          candidates: candidates,
+          csrfToken: req.csrfToken()
+        });
+      });
+    } else {
+      const err = new Error('指定された予定がない、または、予定する権限がありません');
+      err.status = 404;
+      next(err);
+    }
+  });
+});
+
+function isMine(req, schedule) {
+  return schedule && parseInt(schedule.createdBy) === parseInt(req.user.id);
+}
 
 function deleteScheduleAggregate(scheduleId, done, err) {
   const promiseCommentDestroy = Comment.findAll({
