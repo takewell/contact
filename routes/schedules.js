@@ -58,8 +58,7 @@ router.get('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, nex
           where: { scheduleId: schedule.scheduleId },
           order: '"user.username" ASC, "candidateId" ASC'
         }).then((availabilities) => {
-          // 出欠 MapMap(キー:ユーザー名,値:出欠Map(キー:候補 ID, 値:出欠)) を作成する
-          const availabilityMapMap = new Map(); // key: userId, value: Map(key: candidateId, availability)
+          const availabilityMapMap = new Map(); // key : userId, value : Map(key : candidateId, value : availability)
           availabilities.forEach((a) => {
             const map = availabilityMapMap.get(a.user.userId) || new Map();
             map.set(a.candidateId, a.availability);
@@ -93,6 +92,7 @@ router.get('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, nex
           });
 
           console.log(availabilityMapMap); // TODO 除去
+          
           // コメントの所得
           Comment.findAll({
             where: { scheduleId: schedule.scheduleId }

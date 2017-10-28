@@ -10,13 +10,14 @@ router.post('/:scheduleId/users/:userId/candidates/:candidateId', authentication
   const candidateId = req.params.candidateId;
   let availability = req.body.availability;
   availability = availability ? parseInt(availability) : 0;
-
+  console.log(`scheduleId : ${scheduleId} userId : ${userId} candidateId : ${candidateId} availability : ${availability}`);
   Availability.upsert({
-    scheduleId: scheduleId,
-    userId: userId,
     candidateId: candidateId,
-    availability: availability
+    userId: userId,
+    availability: availability,
+    scheduleId: scheduleId
   }).then(() => {
+    console.log('OK');
     res.json({ status: 'OK', availability: availability });
   });
 });

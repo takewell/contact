@@ -5,12 +5,10 @@ const Sequelize = loader.Sequelize;
 const Comment = loader.database.define('comments', {
   scheduleId: {
     type: Sequelize.UUID,
-    primaryKey: true,
     allowNull: false
   },
   userId: {
     type: Sequelize.BIGINT,
-    primaryKey: true,
     allowNull: false
   },
   comment: {
@@ -19,7 +17,12 @@ const Comment = loader.database.define('comments', {
   }
 }, {
   freezeTableName: true,
-  timestamps: false
+  timestamps: false,
+  indexes: [
+    {
+      fields: ['scheduleId']
+    }
+  ]
 });
 
 module.exports = Comment;
