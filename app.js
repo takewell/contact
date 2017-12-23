@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const session = require('express-session');
 const passport = require('passport');
 
-// Moduels 
+// Moduels
 const User = require('./models/user');
 const Schedule = require('./models/schedule');
 const Availability = require('./models/availability');
@@ -56,7 +56,7 @@ const logout = require('./routes/logout');
 const auth = require('./routes/auth');
 const schedules = require('./routes/schedules');
 const availabilities = require('./routes/availabilities');
-const comments = require('./routes/comments')
+const comments = require('./routes/comments');
 
 app.use('/', index);
 app.use('/login', login);

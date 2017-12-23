@@ -12,10 +12,12 @@ router.get('/', (req, res, next) => {
         createdBy: req.user.id
       },
       order: '"updatedAt" DESC'
-    }).then((schedules) => {
-        schedules.forEach((schedule) => {
-        schedule.formattedUpdatedAt = moment(schedule.updatedAt).tz('Asia/Tokyo').format('YYYY/MM/DD HH:mm');
-              });
+    }).then(schedules => {
+      schedules.forEach(schedule => {
+        schedule.formattedUpdatedAt = moment(schedule.updatedAt)
+          .tz('Asia/Tokyo')
+          .format('YYYY/MM/DD HH:mm');
+      });
       res.render('index', {
         title: title,
         user: req.user,
