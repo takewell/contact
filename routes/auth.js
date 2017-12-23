@@ -16,7 +16,7 @@ const TWITTER_API_SECRET =
 const User = require('../models/user');
 
 githubAuth();
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }), (req, res) => {});
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }), (req, res) => { });
 
 router.get(
   '/github/callback',
@@ -27,7 +27,7 @@ router.get(
 );
 
 facebookAuth();
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }), (req, res) => {});
+router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }), (req, res) => { });
 
 router.get(
   '/facebook/callback',
@@ -38,7 +38,7 @@ router.get(
 );
 
 twitterAuth();
-router.get('/twitter', passport.authenticate('twitter'), (req, res) => {});
+router.get('/twitter', passport.authenticate('twitter'), (req, res) => { });
 
 router.get(
   '/twitter/callback',
